@@ -119,13 +119,13 @@ def toggle_state(
     """
     Toggle user state (moderator function)
     """
-    response = crud.user.toggle_user_state(db=db, obj_in=user_in)
-    if not response:
+    if response := crud.user.toggle_user_state(db=db, obj_in=user_in):
+        return {"msg": "User state toggled successfully."}
+    else:
         raise HTTPException(
             status_code=400,
             detail="Invalid request.",
         )
-    return {"msg": "User state toggled successfully."}
 
 
 @router.post("/create", response_model=schemas.User)

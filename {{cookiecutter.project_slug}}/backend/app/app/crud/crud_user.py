@@ -39,12 +39,16 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
     def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
-        user = self.get_by_email(db, email=email)
-        if not user:
+        if user := self.get_by_email(db, email=email):
+            return (
+                None
+                if not verify_password(
+                    plain_password=password, hashed_password=user.hashed_password
+                )
+                else user
+            )
+        else:
             return None
-        if not verify_password(plain_password=password, hashed_password=user.hashed_password):
-            return None
-        return user
 
     def validate_email(self, db: Session, *, db_obj: User) -> User:
         obj_in = UserUpdate(**UserInDB.from_orm(db_obj).dict())
@@ -72,14 +76,10 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def toggle_user_state(self, db: Session, *, obj_in: Union[UserUpdate, Dict[str, Any]]) -> User:
         db_obj = self.get_by_email(db, email=obj_in.email)
-        if not db_obj:
-            return None
-        return self.update(db=db, db_obj=db_obj, obj_in=obj_in)
+        return None if not db_obj else self.update(db=db, db_obj=db_obj, obj_in=obj_in)
 
     def has_password(self, user: User) -> bool:
-        if user.hashed_password:
-            return True
-        return False
+        return bool(user.hashed_password)
     
     def is_active(self, user: User) -> bool:
         return user.is_active

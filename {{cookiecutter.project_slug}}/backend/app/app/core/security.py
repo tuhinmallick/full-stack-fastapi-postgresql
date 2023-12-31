@@ -35,8 +35,7 @@ def create_access_token(*, subject: Union[str, Any], expires_delta: timedelta = 
     else:
         expire = datetime.utcnow() + timedelta(seconds=settings.ACCESS_TOKEN_EXPIRE_SECONDS)
     to_encode = {"exp": expire, "sub": str(subject), "totp": force_totp}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGO)
-    return encoded_jwt
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGO)
 
 
 def create_refresh_token(*, subject: Union[str, Any], expires_delta: timedelta = None) -> str:
@@ -45,8 +44,7 @@ def create_refresh_token(*, subject: Union[str, Any], expires_delta: timedelta =
     else:
         expire = datetime.utcnow() + timedelta(seconds=settings.REFRESH_TOKEN_EXPIRE_SECONDS)
     to_encode = {"exp": expire, "sub": str(subject), "refresh": True}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGO)
-    return encoded_jwt
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.JWT_ALGO)
 
 
 def create_magic_tokens(*, subject: Union[str, Any], expires_delta: timedelta = None) -> list[str]:
@@ -65,10 +63,7 @@ def create_magic_tokens(*, subject: Union[str, Any], expires_delta: timedelta = 
 
 
 def create_new_totp(*, label: str, uri: Optional[str] = None) -> NewTOTP:
-    if not uri:
-        totp = totp_factory.new()
-    else:
-        totp = totp_factory.from_source(uri)
+    totp = totp_factory.new() if not uri else totp_factory.from_source(uri)
     return NewTOTP(
         **{
             "secret": totp.to_json(),

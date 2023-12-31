@@ -46,15 +46,11 @@ class User(UserInDBBase):
 
     @validator("hashed_password", pre=True)
     def evaluate_hashed_password(cls, hashed_password):
-        if hashed_password:
-            return True
-        return False
+        return bool(hashed_password)
 
     @validator("totp_secret", pre=True)
     def evaluate_totp_secret(cls, totp_secret):
-        if totp_secret:
-            return True
-        return False
+        return bool(totp_secret)
 
 
 # Additional properties stored in DB

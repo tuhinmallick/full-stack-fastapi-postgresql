@@ -62,9 +62,7 @@ class NeoCRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         # create_or_update is used to create multiples, so returns a list (of 1)
         if get_first and isinstance(db_objs, list):
             db_objs = db_objs[0]
-        if get_raw:
-            return db_objs
-        return self.get_relationships(db_objs)
+        return db_objs if get_raw else self.get_relationships(db_objs)
 
     @db.read_transaction
     def get(self, *, id: UUID, get_raw: bool = False) -> Optional[ModelType]:
