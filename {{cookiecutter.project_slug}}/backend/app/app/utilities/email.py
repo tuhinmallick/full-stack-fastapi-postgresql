@@ -41,8 +41,9 @@ def send_email_validation_email(data: EmailValidation) -> None:
     subject = f"{settings.PROJECT_NAME} - {data.subject}"
     server_host = settings.SERVER_HOST
     link = f"{server_host}?token={data.token}"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "confirm_email.html") as f:
-        template_str = f.read()
+    template_str = Path(
+        Path(settings.EMAIL_TEMPLATES_DIR) / "confirm_email.html"
+    ).read_text()
     send_email(
         email_to=data.email,
         subject_template=subject,
@@ -53,8 +54,9 @@ def send_email_validation_email(data: EmailValidation) -> None:
 
 def send_web_contact_email(data: EmailContent) -> None:
     subject = f"{settings.PROJECT_NAME} - {data.subject}"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "web_contact_email.html") as f:
-        template_str = f.read()
+    template_str = Path(
+        Path(settings.EMAIL_TEMPLATES_DIR) / "web_contact_email.html"
+    ).read_text()
     send_email(
         email_to=settings.EMAILS_TO_EMAIL,
         subject_template=subject,
@@ -66,8 +68,9 @@ def send_web_contact_email(data: EmailContent) -> None:
 def send_test_email(email_to: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Test email"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "test_email.html") as f:
-        template_str = f.read()
+    template_str = Path(
+        Path(settings.EMAIL_TEMPLATES_DIR) / "test_email.html"
+    ).read_text()
     send_email(
         email_to=email_to,
         subject_template=subject,
@@ -79,8 +82,9 @@ def send_test_email(email_to: str) -> None:
 def send_magic_login_email(email_to: str, token: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"Your {project_name} magic login"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "magic_login.html") as f:
-        template_str = f.read()
+    template_str = Path(
+        Path(settings.EMAIL_TEMPLATES_DIR) / "magic_login.html"
+    ).read_text()
     server_host = settings.SERVER_HOST
     link = f"{server_host}?magic={token}"
     send_email(
@@ -98,8 +102,9 @@ def send_magic_login_email(email_to: str, token: str) -> None:
 def send_reset_password_email(email_to: str, email: str, token: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Password recovery for user {email}"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "reset_password.html") as f:
-        template_str = f.read()
+    template_str = Path(
+        Path(settings.EMAIL_TEMPLATES_DIR) / "reset_password.html"
+    ).read_text()
     server_host = settings.SERVER_HOST
     link = f"{server_host}/reset-password?token={token}"
     send_email(
@@ -119,8 +124,9 @@ def send_reset_password_email(email_to: str, email: str, token: str) -> None:
 def send_new_account_email(email_to: str, username: str, password: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - New account for user {username}"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
-        template_str = f.read()
+    template_str = Path(
+        Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html"
+    ).read_text()
     link = settings.SERVER_HOST
     send_email(
         email_to=email_to,

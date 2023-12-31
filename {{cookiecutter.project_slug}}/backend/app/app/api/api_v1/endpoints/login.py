@@ -219,8 +219,8 @@ def recover_password(email: str, db: Session = Depends(deps.get_db)) -> Any:
     """
     user = crud.user.get_by_email(db, email=email)
     if user and crud.user.is_active(user):
-        tokens = security.create_magic_tokens(subject=user.id)
         if settings.EMAILS_ENABLED:
+            tokens = security.create_magic_tokens(subject=user.id)
             send_reset_password_email(email_to=user.email, email=email, token=tokens[0])
             return {"claim": tokens[1]}
     return {"msg": "If that login exists, we'll send you an email to reset your password."}

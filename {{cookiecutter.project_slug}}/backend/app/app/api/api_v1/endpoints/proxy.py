@@ -31,8 +31,7 @@ async def proxy_post_request(
         }
         async with httpx.AsyncClient() as client:
             proxy = await client.post(f"{path}", headers=headers, data=data)
-        response = Response(content=proxy.content, status_code=proxy.status_code)
-        return response
+        return Response(content=proxy.content, status_code=proxy.status_code)
     except Exception as e:
         raise HTTPException(status_code=403, detail=str(e))
 
@@ -48,8 +47,7 @@ async def proxy_get_request(
         }
         async with httpx.AsyncClient() as client:
             proxy = await client.get(f"{path}", headers=headers)
-        response = Response(content=proxy.content, status_code=proxy.status_code)
-        return response
+        return Response(content=proxy.content, status_code=proxy.status_code)
     except Exception as e:
         raise HTTPException(status_code=403, detail=str(e))
 

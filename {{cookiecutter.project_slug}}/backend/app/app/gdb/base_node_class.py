@@ -60,8 +60,12 @@ class NodeBase(StructuredNode):
             from neomodel.match import _rel_helper
 
             query_params["source_id"] = relationship.source.id
-            query = "MATCH (source:{0}) WHERE ID(source) = $source_id\n ".format(relationship.source.__label__)
-            query += "WITH source\n UNWIND $merge_params as params \n "
+            query = (
+                "MATCH (source:{0}) WHERE ID(source) = $source_id\n ".format(
+                    relationship.source.__label__
+                )
+                + "WITH source\n UNWIND $merge_params as params \n "
+            )
             query += "MERGE "
             query += _rel_helper(
                 lhs="source",
@@ -77,11 +81,7 @@ class NodeBase(StructuredNode):
             query += "ON MATCH SET n += params.update\n"
 
         # close query
-        if lazy:
-            query += "RETURN id(n)"
-        else:
-            query += "RETURN n"
-
+        query += "RETURN id(n)" if lazy else "RETURN n"
         return query, query_params
 
 
